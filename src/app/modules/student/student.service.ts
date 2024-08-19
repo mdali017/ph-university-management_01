@@ -1,15 +1,15 @@
 import { TStudent } from "./student.interface";
 import StudentModel from "./student.model";
 
-const createStudentIntoDB = async (student: TStudent) => {
-  // const result = await StudentModel.create(student); // build in static method
+// const createStudentIntoDB = async (student: TStudent) => {
+//   // const result = await StudentModel.create(student); // build in static method
 
-  const studentInstance = new StudentModel(student); // custome instance methods
+//   const studentInstance = new StudentModel(student); // custome instance methods
 
-  const result = await studentInstance.save();
+//   const result = await studentInstance.save();
 
-  return result;
-};
+//   return result;
+// };
 
 const getAllStudentFromDB = async () => {
   const result = await StudentModel.find();
@@ -27,7 +27,7 @@ const deletedSingleStudentFromDB = async (id: string) => {
 };
 
 export const StudentService = {
-  createStudentIntoDB,
+  // createStudentIntoDB,
   getAllStudentFromDB,
   getSingleStudentFromDB,
   deletedSingleStudentFromDB,
