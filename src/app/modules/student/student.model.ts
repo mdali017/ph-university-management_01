@@ -45,7 +45,7 @@ const studentSchema = new Schema<TStudent>(
         values: ["male", "female", "other"],
         message: "{VALUE} is not valid",
       },
-      required: true
+      required: true,
     },
     dateOfBirth: { type: String },
     email: {
@@ -63,6 +63,10 @@ const studentSchema = new Schema<TStudent>(
     guardian: { type: guardianSchema },
     localguardian: { type: localGuardianSchema },
     profileImage: { type: String },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicSemester",
+    },
     // isActive: {
     //   type: String,
     //   enum: ["active", "in-active"],
