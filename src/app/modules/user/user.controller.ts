@@ -25,7 +25,7 @@ const createStudent: RequestHandler = catchAsync(async (req, res, _next) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Academic Semester is create successfully !!",
+    message: "Student is created successfully !!",
     data: result,
   });
 });

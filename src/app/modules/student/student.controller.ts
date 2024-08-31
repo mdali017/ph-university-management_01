@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { StudentService } from "./student.service";
-import studentValidationSchema from "./student.validation";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status";
+// import studentValidationSchema from "./student.validation";
 
 // const createStudent = async (req: Request, res: Response) => {
 //   try {
@@ -69,6 +71,34 @@ const getSingleStudent = async (req: Request, res: Response) => {
   }
 };
 
+const updateSingleStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const { student } = req.body;
+    const result = await StudentService.updateStudentIntoDB(studentId, student);
+
+    if (!result) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        success: false,
+        message: "Student not found",
+      });
+    }
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Student updated successfully !!!",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(error.statusCode || httpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: error.message || "Failed to update student",
+      err: error,
+    });
+  }
+};
+
 const deleteStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
@@ -91,5 +121,6 @@ export const StudentController = {
   // createStudent,
   getAllStudents,
   getSingleStudent,
+  updateSingleStudent,
   deleteStudent,
 };
