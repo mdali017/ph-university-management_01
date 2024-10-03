@@ -38,7 +38,8 @@ import httpStatus from "http-status";
 
 const getAllStudents = async (req: Request, res: Response) => {
   try {
-    const result = await StudentService.getAllStudentFromDB();
+    console.log(req.query);
+    const result = await StudentService.getAllStudentFromDB(req.query);
     res.status(200).json({
       success: true,
       message: "Students are retrieved Successfully !!!",

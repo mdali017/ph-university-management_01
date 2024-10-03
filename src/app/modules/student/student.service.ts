@@ -4,6 +4,8 @@ import StudentModel from "./student.model";
 import { AppError } from "../../errors/AppError";
 import httpStatus from "http-status";
 import { UserModel } from "../user/user.model";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { studentSearchableFields } from "./student.constant";
 
 // const createStudentIntoDB = async (student: TStudent) => {
 //   // const result = await StudentModel.create(student); // build in static method
@@ -15,18 +17,85 @@ import { UserModel } from "../user/user.model";
 //   return result;
 // };
 
-const getAllStudentFromDB = async () => {
-  // const result = await StudentModel.find()
+const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  // =========== previous code start here =========
+  // const queryObj = { ...query };
+
+  // // Extract search term from query
+  // let searchTerm = "";
+  // if (query?.searchTerm) {
+  //   searchTerm = query?.searchTerm as string;
+  // }
+
+  // // Searchable fields
+  // const searchableFields = ["email", "name.firstName", "presentAddress"];
+
+  // // Create search query based on the search term
+  // const searchQuery = {
+  //   $or: searchableFields.map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: "i" },
+  //   })),
+  // };
+
+  // // Filtering logic, removing fields that are not used for filtering
+  // const excludedFields = ["searchTerm", "sort", "limit", "page"];
+  // excludedFields.forEach((element) => delete queryObj[element]);
+
+  // // Sorting logic
+  // let sort = "-createdAt"; // Default sort by createdAt descending
+  // if (query.sort) {
+  //   sort = query.sort as string;
+  // }
+
+  // // Pagination logic
+  // let page = 1;
+  // let limit = 10; // Default limit
+  // if (query.page) {
+  //   page = Number(query.page as string); // Ensure it's parsed as a number
+  // }
+  // if (query.limit) {
+  //   limit = parseInt(query.limit as string, 10); // Ensure it's parsed as a number
+  // }
+  // const skip = (page - 1) * limit;
+
+  // // Final query with filters, sorting, pagination, and population
+  // const result = await StudentModel.find({
+  //   ...searchQuery,
+  //   ...queryObj,
+  // })
   //   .populate("admissionSemester")
-  //   .populate("academicDepartment");
-  const result = await StudentModel.find()
-    .populate("admissionSemester")
-    .populate({
-      path: "academicDepartment",
-      populate: {
-        path: "academicFaculty",
-      },
-    });
+  //   .populate({
+  //     path: "academicDepartment",
+  //     populate: {
+  //       path: "academicFaculty",
+  //     },
+  //   })
+  //   .sort(sort)
+  //   .skip(skip) // Correctly applying the skip for pagination
+  //   .limit(limit); // Applying the limit
+
+  // return result;
+
+  // =========== previous code start here =========
+
+  const studentQuery = new QueryBuilder(
+    StudentModel.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "academicDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    query
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await studentQuery.modelQuery;
   return result;
 };
 

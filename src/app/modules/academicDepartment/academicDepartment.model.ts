@@ -31,15 +31,15 @@ class AppError extends Error {
   }
 }
 
-academicDepartmentSchema.pre("save", async function (next) {
-  const isDepartmentExist = await AcademicDepartmentModel.findOne({
-    name: this.name,
-  });
-  if (isDepartmentExist) {
-    throw new Error("This Department is already exits!");
-  }
-  next();
-});
+// academicDepartmentSchema.pre("save", async function (next) {
+//   const isDepartmentExist = await AcademicDepartmentModel.findOne({
+//     name: this.name,
+//   });
+//   if (isDepartmentExist) {
+//     throw new Error("This Department is already exits!");
+//   }
+//   next();
+// });
 
 academicDepartmentSchema.pre("findOneAndUpdate", async function (next) {
   const query = this.getQuery();
